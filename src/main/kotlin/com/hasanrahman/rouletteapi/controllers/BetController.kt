@@ -1,7 +1,7 @@
 package com.hasanrahman.rouletteapi.controllers
 
 import com.hasanrahman.rouletteapi.services.BetService
-import com.hasanrahman.rouletteapi.utility.versions
+import com.hasanrahman.rouletteapi.utility.Versions
 import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -13,7 +13,7 @@ class BetController @Autowired constructor(private val betService: BetService) {
 	@PostMapping("setVersion")
 	fun setVersion(
 		@ApiParam(value = "version", required = true)
-		@RequestParam(value = "version") version: versions,
+		@RequestParam(value = "version") version: Versions,
 		httpSession: HttpSession
 	) = betService.setVersion(version, httpSession)
 	
