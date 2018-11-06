@@ -1,6 +1,7 @@
 package com.hasanrahman.rouletteapi.controllers
 
 import com.hasanrahman.rouletteapi.services.BetService
+import com.hasanrahman.rouletteapi.utility.OutsideBets
 import com.hasanrahman.rouletteapi.utility.Versions
 import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,5 +20,16 @@ class BetController @Autowired constructor(private val betService: BetService) {
 	
 	@GetMapping("getVersion")
 	fun getVersion(httpSession: HttpSession) = betService.getVersion(httpSession)
+	
+	@GetMapping("outsiderBet")
+	fun outsiderBetCount(
+		@ApiParam(value = "amount", required = true)
+		@RequestParam(value = "amount") amount: Int,
+		@ApiParam(value = "outsideBets", required = true)
+		@RequestParam(value = "outsideBets") outsideBets: OutsideBets,
+		httpSession: HttpSession
+	): Int {
+		return betService.outsideBets(amount, outsideBets, httpSession)
+	}
 	
 }
