@@ -1,6 +1,7 @@
 package com.hasanrahman.rouletteapi.controllers
 
 import com.hasanrahman.rouletteapi.services.BetService
+import com.hasanrahman.rouletteapi.utility.InsideBets
 import com.hasanrahman.rouletteapi.utility.OutsideBets
 import com.hasanrahman.rouletteapi.utility.Versions
 import io.swagger.annotations.ApiParam
@@ -21,15 +22,28 @@ class BetController @Autowired constructor(private val betService: BetService) {
 	@GetMapping("getVersion")
 	fun getVersion(httpSession: HttpSession) = betService.getVersion(httpSession)
 	
-	@GetMapping("outsiderBet")
-	fun outsiderBetCount(
+	@GetMapping("outsideBet")
+	fun outsideBetCount(
 		@ApiParam(value = "amount", required = true)
-		@RequestParam(value = "amount") amount: Int,
+		@RequestParam(value = "amount") amount: Double,
 		@ApiParam(value = "outsideBets", required = true)
 		@RequestParam(value = "outsideBets") outsideBets: OutsideBets,
 		httpSession: HttpSession
-	): Int {
+	): Double {
 		return betService.outsideBets(amount, outsideBets, httpSession)
+	}
+	
+	@GetMapping("insideBet")
+	fun insideBetCount(
+		@ApiParam(value = "amount", required = true)
+		@RequestParam(value = "amount") amount: Double,
+		@ApiParam(value = "insideBets", required = true)
+		@RequestParam(value = "insideBets") insideBets: InsideBets,
+		@ApiParam(value = "numbers", required = true)
+		@RequestParam(value = "numbers") numbers: Array<String>,
+		httpSession: HttpSession
+	): Double {
+		return betService.insideBets(amount, insideBets, numbers, httpSession)
 	}
 	
 }
