@@ -1,6 +1,5 @@
 package com.hasanrahman.rouletteapi.services
 
-import com.hasanrahman.rouletteapi.exceptions.VersionNotFound
 import com.hasanrahman.rouletteapi.utility.*
 import org.springframework.stereotype.Service
 import java.util.*
@@ -27,14 +26,12 @@ class BetService {
 	 * Getting the current version of roulette
 	 *  @param httpSession: HttpSession to save the version value
 	 *  @return saved version value
-	 *  @throws VersionNotFound exception
 	 */
 	fun getVersion(httpSession: HttpSession): String =
 		if (httpSession.getAttribute(Const.VERSION) != null)
 			httpSession.getAttribute(Const.VERSION).toString()
-		else throw VersionNotFound(
-			"version not set"
-		)
+		else
+			Versions.EU_VERSION.toString()
 	
 	/**
 	 * Running the roulette randomizer for outside Bets and returning the winning value
