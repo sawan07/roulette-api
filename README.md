@@ -96,6 +96,8 @@ This command will run the JMeter load test. The load test runs an inside bet and
 
 There are two jmx files available inside _src/test/jmeter/_ directory. The preset JMeter files have a longer assertion time set. If the load testing is done from the JMeter source application, it takes less time than doing that through command line. To test using short assertion time, the value needs to be changed inside the gradle build file. SImply change the following line:```jmTestFiles = [file("src/test/jmeter/roulette_test_plan.jmx")]``` to ```jmTestFiles = [file("src/test/jmeter/roulette_test_plan_short_time.jmx")]``` 
 
+> The application has been developed based on the information found in _https://en.wikipedia.org/wiki/Roulette_
+
  
                                      
  
