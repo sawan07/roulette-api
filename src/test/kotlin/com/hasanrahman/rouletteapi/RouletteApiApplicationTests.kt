@@ -6,15 +6,9 @@ import com.hasanrahman.rouletteapi.utility.OutsideBets
 import com.hasanrahman.rouletteapi.utility.Versions
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockHttpServletRequest
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit4.SpringRunner
 
-@RunWith(SpringRunner::class)
-@SpringBootTest
-@ActiveProfiles("test")
+
 class RouletteApiApplicationTests {
 	
 	private var betService = BetService()
@@ -24,6 +18,7 @@ class RouletteApiApplicationTests {
 		
 		val result = httpSession?.let { betService.setVersion(Versions.EU_VERSION, it) }
 		Assert.assertEquals(Versions.EU_VERSION.toString(), result)
+		
 	}
 	
 	/**
@@ -31,7 +26,6 @@ class RouletteApiApplicationTests {
 	 * Bet
 	 * Tests
 	 */
-	
 	@Test
 	fun firstDozenTest() {
 		httpSession?.let { betService.setVersion(Versions.EU_VERSION, it) }

@@ -10,6 +10,7 @@ buildscript {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
 		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+
 	}
 }
 
@@ -51,7 +52,12 @@ jmeter {
 }
 
 
+
+
 dependencies {
+	testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
+	testCompile("org.junit.jupiter:junit-jupiter-params:5.3.1")
+	testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
 	implementation('org.springframework.boot:spring-boot-starter-integration')
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -62,3 +68,4 @@ dependencies {
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
+
