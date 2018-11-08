@@ -1,5 +1,6 @@
 package com.hasanrahman.rouletteapi.services
 
+import com.hasanrahman.rouletteapi.models.Winning
 import com.hasanrahman.rouletteapi.utility.*
 import org.springframework.stereotype.Service
 import java.util.*
@@ -42,10 +43,10 @@ class BetService {
 	 * All outside bets has a very well defined sets of slot. The random number is checked
 	 * inside the list based on the outside bet type and thus the winning is calculated.
 	 */
-	fun outsideBets(amount: Double, outsideBets: OutsideBets, httpSession: HttpSession): Double {
+	fun outsideBets(amount: Double, outsideBets: OutsideBets, httpSession: HttpSession): Winning {
 		val number = randomize(getVersion(httpSession)).toInt()
 		logger.info("rolled number is $number")
-		return when (outsideBets) {
+		val winningAmount = when (outsideBets) {
 			OutsideBets.BLACK -> if (listOf(
 					2,
 					4,
@@ -66,7 +67,7 @@ class BetService {
 					33,
 					35
 				).contains(number)
-			) amount * 2 else 0.00
+			) amount * 2 else (0.00 - amount)
 			OutsideBets.RED -> if (listOf(
 					1,
 					3,
@@ -89,10 +90,10 @@ class BetService {
 				).contains(
 					number
 				)
-			) amount * 2 else 0.00
-			OutsideBets.FIRST_DOZEN -> if (number in 1..12) amount * 3 else 0.00
-			OutsideBets.SECOND_DOZEN -> if (number in 13..24) amount * 3 else 0.00
-			OutsideBets.THIRD_DOZEN -> if (number in 25..36) amount * 3 else 0.00
+			) amount * 2 else (0.00 - amount)
+			OutsideBets.FIRST_DOZEN -> if (number in 1..12) amount * 3 else (0.00 - amount)
+			OutsideBets.SECOND_DOZEN -> if (number in 13..24) amount * 3 else (0.00 - amount)
+			OutsideBets.THIRD_DOZEN -> if (number in 25..36) amount * 3 else (0.00 - amount)
 			OutsideBets.FIRST_COLUMN -> if (listOf(
 					1,
 					4,
@@ -107,7 +108,7 @@ class BetService {
 					31,
 					34
 				).contains(number)
-			) amount * 3 else 0.00
+			) amount * 3 else (0.00 - amount)
 			OutsideBets.SECOND_COLUMN -> if (listOf(
 					2,
 					5,
@@ -122,7 +123,7 @@ class BetService {
 					32,
 					35
 				).contains(number)
-			) amount * 3 else 0.00
+			) amount * 3 else (0.00 - amount)
 			OutsideBets.THIRD_COLUMN -> if (listOf(
 					3,
 					6,
@@ -137,12 +138,13 @@ class BetService {
 					33,
 					36
 				).contains(number)
-			) amount * 3 else 0.00
-			OutsideBets.LOW -> if (number in 1..18) amount * 2 else 0.00
-			OutsideBets.HIGH -> if (number in 19..36) amount * 2 else 0.00
-			OutsideBets.EVEN -> if (number % 2 == 0) amount * 2 else 0.00
-			OutsideBets.ODD -> if (number % 2 == 1) amount * 2 else 0.00
+			) amount * 3 else (0.00 - amount)
+			OutsideBets.LOW -> if (number in 1..18) amount * 2 else (0.00 - amount)
+			OutsideBets.HIGH -> if (number in 19..36) amount * 2 else (0.00 - amount)
+			OutsideBets.EVEN -> if (number % 2 == 0) amount * 2 else (0.00 - amount)
+			OutsideBets.ODD -> if (number % 2 == 1) amount * 2 else (0.00 - amount)
 		}
+		return Winning(winningAmount > 0, winningAmount)
 	}
 	
 	/**
@@ -176,11 +178,11 @@ class BetService {
 	 * bet. The randmizer generates a random number and that is checked with the user inserted
 	 * array of slots. Based on the result of that, the winning is calculated.
 	 */
-	fun insideBets(amount: Double, insideBets: InsideBets, numbers: Array<String>, httpSession: HttpSession): Double {
+	fun insideBets(amount: Double, insideBets: InsideBets, numbers: Array<String>, httpSession: HttpSession): Winning {
 		val version = getVersion(httpSession)
 		val number = randomize(version)
 		logger.info("rolled number is $number")
-		return if (numbers.contains(number)) {
+		val winningAmount = if (numbers.contains(number)) {
 			when (insideBets) {
 				InsideBets.SINGLE -> amount * 36
 				InsideBets.SPLIT -> amount * 18
@@ -191,8 +193,8 @@ class BetService {
 				//US and EU version returns different payout for BASKET as US version has an extra 00
 				InsideBets.BASKET -> if (version == Versions.EU_VERSION.toString()) amount * 9 else amount * 7
 			}
-		} else 0.00
-		
+		} else (0.00 - amount)
+		return Winning(winningAmount > 0, winningAmount)
 	}
 	
 }

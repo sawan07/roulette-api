@@ -1,5 +1,6 @@
 package com.hasanrahman.rouletteapi.controllers
 
+import com.hasanrahman.rouletteapi.models.Winning
 import com.hasanrahman.rouletteapi.services.BetService
 import com.hasanrahman.rouletteapi.utility.InsideBets
 import com.hasanrahman.rouletteapi.utility.OutsideBets
@@ -29,7 +30,7 @@ class BetController @Autowired constructor(private val betService: BetService) {
 		@ApiParam(value = "outsideBets", required = true)
 		@RequestParam(value = "outsideBets") outsideBets: OutsideBets,
 		httpSession: HttpSession
-	): Double {
+	): Winning {
 		return betService.outsideBets(amount, outsideBets, httpSession)
 	}
 	
@@ -42,7 +43,7 @@ class BetController @Autowired constructor(private val betService: BetService) {
 		@ApiParam(value = "numbers", required = true)
 		@RequestParam(value = "numbers") numbers: Array<String>,
 		httpSession: HttpSession
-	): Double {
+	): Winning {
 		return betService.insideBets(amount, insideBets, numbers, httpSession)
 	}
 	
